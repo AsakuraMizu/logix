@@ -1,5 +1,5 @@
 const typography = require('@tailwindcss/typography');
-const forms = require('@tailwindcss/forms');
+// const forms = require('@tailwindcss/forms');
 const logical = require('tailwindcss-logical');
 
 /**
@@ -10,6 +10,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [forms, typography, logical],
+  plugins: [typography, logical],
   darkMode: 'media',
 };
