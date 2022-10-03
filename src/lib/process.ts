@@ -20,9 +20,9 @@ export function init() {
   jsep.addBinaryOp('||', 3);
   jsep.addBinaryOp('∨', 3);
 
-  jsep.addBinaryOp('>', 2);
-  jsep.addBinaryOp('->', 2);
-  jsep.addBinaryOp('→', 2);
+  jsep.addBinaryOp('>', 2, true);
+  jsep.addBinaryOp('->', 2, true);
+  jsep.addBinaryOp('→', 2, true);
 
   jsep.addBinaryOp('<>', 1);
   jsep.addBinaryOp('<->', 1);
