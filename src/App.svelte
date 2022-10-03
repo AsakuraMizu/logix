@@ -41,7 +41,7 @@
       <TextBox bind:value={expr} placeholder="Input an expression..." />
       <br />
       {#if err || !expr || variables.length === 0}
-        {#if err}
+        {#if err && expr}
           <InfoBar severity="critical" closable={false} message={err.toString()} />
         {/if}
       {:else}
