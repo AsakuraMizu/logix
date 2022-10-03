@@ -40,8 +40,8 @@
     <div class="w-full lg:w-3/5">
       <TextBox bind:value={expr} placeholder="Input an expression..." />
       <br />
-      {#if err}
-        {#if expr}
+      {#if err || !expr || variables.length === 0}
+        {#if err}
           <InfoBar severity="critical" closable={false} message={err.toString()} />
         {/if}
       {:else}

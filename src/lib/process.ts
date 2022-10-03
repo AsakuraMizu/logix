@@ -140,6 +140,7 @@ export function process(expr: string): ReturnType {
   let tree = jsep(expr) as CoreExpression;
   tree = check(tree);
   const variables = Array.from(findVariables(tree));
+  variables.sort((a, b) => a.localeCompare(b));
   const result: boolean[] = [];
   for (let i = 0; i < 1 << variables.length; i += 1) {
     const values = variables.reduce<Record<string, boolean>>((values, value, idx) => {
