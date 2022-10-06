@@ -137,9 +137,12 @@
         Additionally, you can use<code>,</code> or <code>;</code> to split multiple expressions to calculate
         their values at the same time.
       </div>
+      <div>
+        <code>0/1/false/true/F/T</code> is also allowed in input.
+      </div>
       <TextBlock variant="title">Examples</TextBlock>
       <ul class="list-inside list-disc">
-        <li><code>a&b>c</code></li>
+        <li><code>a&T|false^1</code></li>
         <li><code>(!a1|!a2)>(a1&lt;>!a2);a1|a2</code></li>
       </ul>
     </div>
