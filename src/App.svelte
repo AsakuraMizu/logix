@@ -1,10 +1,14 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { InfoBar, RadioButton, TextBlock, TextBox } from 'fluent-svelte';
-  import { init, process } from './lib/process';
-  import Navbar from './lib/Navbar.svelte';
+  import process from './process';
+  import Navbar from './Navbar.svelte';
+  import { ParseError } from './parser/error';
 
   let expr = '';
+  $: exprs = expr
+    .replace(/^(,|;)/, '')
+    .replace(/(,|;)$/, '')
+    .split(/,|;/);
   let mode: '01' | 'ft' | 'FT' = '01';
   const display = (value: boolean) => {
     switch (mode) {
@@ -17,14 +21,12 @@
     }
   };
 
-  onMount(() => init());
-
   let variables: string[] = [],
-    result: boolean[] = [];
-  let err: Error;
+    results: boolean[][] = [];
+  let err: Error | undefined;
   $: {
     try {
-      ({ variables, result } = process(expr));
+      ({ variables, results } = process(exprs));
       err = undefined;
     } catch (e) {
       err = e;
@@ -42,7 +44,23 @@
       <br />
       {#if err || !expr || variables.length === 0}
         {#if err && expr}
-          <InfoBar severity="critical" closable={false} message={err.toString()} />
+          <InfoBar severity="critical" closable={false}>
+            <div class="font-mono">
+              {err.toString()}
+              <br />
+              {#if err instanceof ParseError}
+                {expr}
+                <br />
+                {#each Array.from({ length: expr.length + 1 }).map((_, i) => i) as i}
+                  {#if i < err.start || i > err.end}
+                    &nbsp;
+                  {:else}
+                    ^
+                  {/if}
+                {/each}
+              {/if}
+            </div>
+          </InfoBar>
         {/if}
       {:else}
         <table class="table w-full table-fixed text-center">
@@ -51,17 +69,21 @@
               {#each variables as v}
                 <th class="py-1">{v}</th>
               {/each}
-              <th class="py-1">{expr}</th>
+              {#each exprs as expr}
+                <th class="py-1">{expr}</th>
+              {/each}
             </tr>
           </thead>
           <tbody>
             {#key mode}
-              {#each result as r, i}
+              {#each results as rs, i}
                 <tr class="border-b border-slate-400 bg-white bg-opacity-10 hover:bg-opacity-50">
                   {#each variables.map((_, idx) => idx) as idx}
                     <td class="py-1">{display(!!(i & (1 << (variables.length - idx - 1))))}</td>
                   {/each}
-                  <td class="py-1">{display(r)}</td>
+                  {#each rs as r}
+                    <td class="py-1">{display(r)}</td>
+                  {/each}
                 </tr>
               {/each}
             {/key}
@@ -111,6 +133,15 @@
           </tr>
         </tbody>
       </table>
+      <div>
+        Additionally, you can use<code>,</code> or <code>;</code> to split multiple expressions to calculate
+        their values at the same time.
+      </div>
+      <TextBlock variant="title">Examples</TextBlock>
+      <ul class="list-inside list-disc">
+        <li><code>a&b>c</code></li>
+        <li><code>(!a1|!a2)>(a1&lt;>!a2);a1|a2</code></li>
+      </ul>
     </div>
   </div>
 </main>

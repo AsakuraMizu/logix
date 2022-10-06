@@ -1949,13 +1949,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsep@npm:^1.3.7":
-  version: 1.3.7
-  resolution: "jsep@npm:1.3.7"
-  checksum: 381f37247ca21de65eaaaa2e1d0aeef457d496e0bed77c0a4dfbfdc507a9321e4ba2713a8742d19fa8006446c8e6f516b3f1542f11cb5513557de574343a345b
-  languageName: node
-  linkType: hard
-
 "json-parse-even-better-errors@npm:^2.3.0":
   version: 2.3.1
   resolution: "json-parse-even-better-errors@npm:2.3.1"
@@ -3306,7 +3299,6 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
     fluent-svelte: ^1.6.0
-    jsep: ^1.3.7
     postcss: ^8.4.16
     postcss-load-config: ^4.0.1
     prettier: ^2.7.1
