@@ -26,12 +26,12 @@ export interface RParenthesis extends IToken {
   type: 'RParenthesis';
 }
 
-export interface Identifier extends IToken {
+export interface IdentifierToken extends IToken {
   type: 'Identifier';
   name: string;
 }
 
-export interface Literal extends IToken {
+export interface LiteralToken extends IToken {
   type: 'Literal';
   value: string;
 }
@@ -41,8 +41,8 @@ export type Token =
   | UnaryOperator
   | LParenthesis
   | RParenthesis
-  | Identifier
-  | Literal;
+  | IdentifierToken
+  | LiteralToken;
 
 export default class Lexer {
   idx = 0;
@@ -67,7 +67,7 @@ export default class Lexer {
         maybe_unary = false;
         this.idx++;
       } else {
-        let match: string | false;
+        let match: string | undefined;
         if (maybe_unary && (match = this.matchUnaryOperator(expr))) {
           result.push({
             type: 'UnaryOperator',

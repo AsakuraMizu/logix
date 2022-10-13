@@ -14,7 +14,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@ota-meshi/svelte/recommended',
+    'plugin:svelte/recommended',
     'plugin:prettier/recommended',
   ],
   plugins: ['@typescript-eslint'],

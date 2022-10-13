@@ -2,11 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  color: var(--fds-text-primary);
-}
-
-.bg-card {
-  background-color: var(--fds-card-background-secondary);
-}

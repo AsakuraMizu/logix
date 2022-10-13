@@ -1,6 +1,7 @@
 const typography = require('@tailwindcss/typography');
 // const forms = require('@tailwindcss/forms');
 const logical = require('tailwindcss-logical');
+const daisyui = require('daisyui');
 
 /**
  * @type {import("tailwindcss").Config}
@@ -10,6 +11,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [typography, logical],
+  plugins: [typography, /* forms, */ logical, daisyui],
   darkMode: 'media',
 };

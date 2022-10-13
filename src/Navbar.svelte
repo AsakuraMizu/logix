@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { IconButton } from 'fluent-svelte';
 </script>
 
@@ -22,4 +22,4 @@
       </IconButton>
     </nav>
   </div>
-</header>
+</header> -->

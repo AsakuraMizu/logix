@@ -1,32 +1,5 @@
-import type { Expression } from './parser/ast';
-import Lang from './parser/lang';
-import Parser from './parser/parser';
-
-const lang = new Lang(
-  {
-    '&': [4, false],
-    '&&': [4, false],
-    '∧': [4, false],
-    '|': [3, false],
-    '||': [3, false],
-    '∨': [3, false],
-    '>': [2, true],
-    '->': [2, true],
-    '→': [2, true],
-    '<>': [1, true],
-    '<->': [1, true],
-    '↔': [1, true],
-    '==': [1, true],
-    '^': [5, false],
-    '!=': [5, false],
-    '↑': [4, false],
-    '↓': [3, false],
-  },
-  ['!', '~', '¬'],
-  ['0', '1', 'false', 'true', 'F', 'T'],
-  '#_@'
-);
-const parser = new Parser(lang);
+import parser from '../../parser';
+import type { Expression } from '../../parser/ast';
 
 function calcBinaryOp(op: string, left: boolean, right: boolean) {
   switch (op) {
@@ -92,11 +65,27 @@ function calc(tree: Expression, values: Record<string, boolean>): boolean {
 export interface ReturnType {
   variables: string[];
   results: boolean[][];
+  errors: (Error | undefined)[];
 }
 
 export default function process(exprs: string[]): ReturnType {
-  const trees = exprs.map((subexpr) => parser.parse(subexpr)!);
-  const variables = Array.from(new Set(...trees.map(findVariables)));
+  const errors: (Error | undefined)[] = [];
+  const trees = exprs.map((subexpr, i) => {
+    let tree: Expression;
+    try {
+      tree = parser.parse(subexpr)!;
+      errors[i] = undefined;
+      return tree;
+    } catch (e) {
+      errors[i] = e;
+      return undefined;
+    }
+  });
+  if (errors.findIndex((err) => err !== undefined) !== -1)
+    return { variables: [], results: [], errors };
+  if (trees.findIndex((tree) => tree === undefined) !== -1)
+    return { variables: [], results: [], errors: [] };
+  const variables = Array.from(new Set(trees.map(findVariables).flatMap((map) => Array.from(map))));
   variables.sort((a, b) => a.localeCompare(b));
   const results: boolean[][] = [];
   for (let i = 0; i < 1 << variables.length; i += 1) {
@@ -104,11 +93,12 @@ export default function process(exprs: string[]): ReturnType {
       values[value] = !!(i & (1 << (variables.length - idx - 1)));
       return values;
     }, {});
-    results.push(trees.map((tree) => calc(tree, values)));
+    results.push(trees.map((tree) => calc(tree!, values)));
   }
 
   return {
     variables,
     results,
+    errors,
   };
 }
